@@ -68,6 +68,9 @@ function createItemElement(work) {
     });
     anchor.appendChild(favoriteButton);
 
+    const caption = document.createElement("div");
+    caption.className = "caption";
+
     const meta = document.createElement("div");
     meta.className = "meta";
 
@@ -80,11 +83,13 @@ function createItemElement(work) {
     genre.textContent = work.genre;
     meta.appendChild(genre);
 
-    anchor.appendChild(meta);
+    caption.appendChild(meta);
 
     const title = document.createElement("p");
     title.textContent = truncate(work.title, 40);
-    anchor.appendChild(title);
+    caption.appendChild(title);
+
+    anchor.appendChild(caption);
 
     return anchor;
 }
