@@ -1,4 +1,4 @@
-const DEFAULT_DATA_URL = "../data/test.json";
+const DEFAULT_DATA_URL = "data/test.json";
 const FAVORITES_STORAGE_KEY = "favorite_product_ids";
 const PAGE_SIZE = 20;
 
