@@ -302,6 +302,9 @@ function setupInfiniteScroll() {
         (entries) => {
             if (entries[0].isIntersecting && renderedCount < displayedWorks.length) {
                 renderNextPage();
+                // 交差状態の再通知を強制するため、observeし直す
+                observer.unobserve(sentinel);
+                observer.observe(sentinel);
             }
         },
         { rootMargin: "400px 0px" }

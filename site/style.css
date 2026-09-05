@@ -167,6 +167,7 @@ header {
 .item {
     position: relative;
     width: 100%;
+    min-width: 0;
     background-color: #fff;
     border: 1px solid #e5e5e5;
     transition: border-color 200ms;
