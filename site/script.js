@@ -1,6 +1,6 @@
 const DEFAULT_DATA_URL = "data/test.json";
 const FAVORITES_STORAGE_KEY = "favorite_product_ids";
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 12;
 
 let allWorks = [];
 let displayedWorks = [];
@@ -51,6 +51,8 @@ function createItemElement(work) {
     const img = document.createElement("img");
     img.src = removeThumbnailResolution(work.thumbnail);
     img.alt = work.productId;
+    img.loading = "lazy";
+    img.decoding = "async";
     anchor.appendChild(img);
 
     const favoriteButton = document.createElement("button");
@@ -96,13 +98,22 @@ function createItemElement(work) {
     return anchor;
 }
 
+let isRenderingNextPage = false;
+
 function renderNextPage() {
+    if (isRenderingNextPage) return;
+    isRenderingNextPage = true;
+
     const container = document.getElementById("container");
     const nextWorks = displayedWorks.slice(renderedCount, renderedCount + PAGE_SIZE);
+    const fragment = document.createDocumentFragment();
     nextWorks.forEach((work) => {
-        container.appendChild(createItemElement(work));
+        fragment.appendChild(createItemElement(work));
     });
+    container.appendChild(fragment);
     renderedCount += nextWorks.length;
+
+    isRenderingNextPage = false;
 }
 
 function renderItems(works) {
@@ -287,11 +298,14 @@ function setupSearchAndSort() {
 
 function setupInfiniteScroll() {
     const sentinel = document.getElementById("sentinel");
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && renderedCount < displayedWorks.length) {
-            renderNextPage();
-        }
-    });
+    const observer = new IntersectionObserver(
+        (entries) => {
+            if (entries[0].isIntersecting && renderedCount < displayedWorks.length) {
+                renderNextPage();
+            }
+        },
+        { rootMargin: "400px 0px" }
+    );
     observer.observe(sentinel);
 }
 
