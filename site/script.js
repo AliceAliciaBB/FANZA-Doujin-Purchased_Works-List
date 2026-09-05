@@ -75,7 +75,9 @@ function createItemElement(work) {
     meta.className = "meta";
 
     const circleName = document.createElement("p");
-    circleName.textContent = truncate(work.circleName, 7);
+    circleName.className = "circle_name";
+    circleName.textContent = work.circleName;
+    circleName.title = work.circleName;
     meta.appendChild(circleName);
 
     const genre = document.createElement("p");
