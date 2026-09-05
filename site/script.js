@@ -1,6 +1,37 @@
 const DEFAULT_DATA_URL = "../data/test.json";
+const FAVORITES_STORAGE_KEY = "favorite_product_ids";
+const PAGE_SIZE = 20;
 
 let allWorks = [];
+let displayedWorks = [];
+let renderedCount = 0;
+
+function loadFavoriteIds() {
+    try {
+        const raw = localStorage.getItem(FAVORITES_STORAGE_KEY);
+        return new Set(raw ? JSON.parse(raw) : []);
+    } catch (e) {
+        return new Set();
+    }
+}
+
+function saveFavoriteIds(favoriteIds) {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Array.from(favoriteIds)));
+}
+
+function isFavorite(productId) {
+    return loadFavoriteIds().has(productId);
+}
+
+function toggleFavorite(productId) {
+    const favoriteIds = loadFavoriteIds();
+    if (favoriteIds.has(productId)) {
+        favoriteIds.delete(productId);
+    } else {
+        favoriteIds.add(productId);
+    }
+    saveFavoriteIds(favoriteIds);
+}
 
 function removeThumbnailResolution(url) {
     return url.replace(/-\d+x\d+(?=\.\w+$)/, "");
@@ -21,6 +52,22 @@ function createItemElement(work) {
     img.src = removeThumbnailResolution(work.thumbnail);
     img.alt = work.productId;
     anchor.appendChild(img);
+
+    const favoriteButton = document.createElement("button");
+    favoriteButton.type = "button";
+    favoriteButton.className = "favorite_button";
+    favoriteButton.textContent = "★";
+    favoriteButton.classList.toggle("active", isFavorite(work.productId));
+    favoriteButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(work.productId);
+        favoriteButton.classList.toggle("active", isFavorite(work.productId));
+        if (document.getElementById("favorite_only").checked) {
+            applyFilterAndSort();
+        }
+    });
+    anchor.appendChild(favoriteButton);
 
     const meta = document.createElement("div");
     meta.className = "meta";
@@ -43,17 +90,28 @@ function createItemElement(work) {
     return anchor;
 }
 
+function renderNextPage() {
+    const container = document.getElementById("container");
+    const nextWorks = displayedWorks.slice(renderedCount, renderedCount + PAGE_SIZE);
+    nextWorks.forEach((work) => {
+        container.appendChild(createItemElement(work));
+    });
+    renderedCount += nextWorks.length;
+}
+
 function renderItems(works) {
     const container = document.getElementById("container");
     container.innerHTML = "";
-    works.forEach((work) => {
-        container.appendChild(createItemElement(work));
-    });
+    displayedWorks = works;
+    renderedCount = 0;
+    renderNextPage();
 }
 
 function renderEmptyMessage() {
     const container = document.getElementById("container");
     container.innerHTML = "";
+    displayedWorks = [];
+    renderedCount = 0;
     const message = document.createElement("p");
     message.className = "empty_message";
     message.textContent = "データなし";
@@ -82,8 +140,14 @@ function filterWorks(works, keyword) {
     return works.filter(
         (work) =>
             work.title.toLowerCase().includes(lowerKeyword) ||
-            work.circleName.toLowerCase().includes(lowerKeyword)
+            work.circleName.toLowerCase().includes(lowerKeyword) ||
+            work.productId.toLowerCase().includes(lowerKeyword)
     );
+}
+
+function filterByFavorite(works, favoriteOnly) {
+    if (!favoriteOnly) return works;
+    return works.filter((work) => isFavorite(work.productId));
 }
 
 function getSelectedGenres() {
@@ -166,9 +230,11 @@ function applyStateFromURLParams() {
 function applyFilterAndSort() {
     const keyword = document.getElementById("search_input").value;
     const genres = getSelectedGenres();
+    const favoriteOnly = document.getElementById("favorite_only").checked;
     const sortOrder = document.getElementById("sort_select").value;
     const filteredByGenre = filterByGenre(allWorks, genres);
-    const filtered = filterWorks(filteredByGenre, keyword);
+    const filteredByFavorite = filterByFavorite(filteredByGenre, favoriteOnly);
+    const filtered = filterWorks(filteredByFavorite, keyword);
     const sorted = sortWorks(filtered, sortOrder);
     if (sorted.length === 0) {
         renderEmptyMessage();
@@ -210,9 +276,21 @@ function setupFileInput() {
 function setupSearchAndSort() {
     document.getElementById("search_input").addEventListener("input", applyFilterAndSort);
     document.getElementById("sort_select").addEventListener("change", applyFilterAndSort);
+    document.getElementById("favorite_only").addEventListener("change", applyFilterAndSort);
+}
+
+function setupInfiniteScroll() {
+    const sentinel = document.getElementById("sentinel");
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && renderedCount < displayedWorks.length) {
+            renderNextPage();
+        }
+    });
+    observer.observe(sentinel);
 }
 
 setupFileInput();
 setupSearchAndSort();
 setupGenreDropdown();
+setupInfiniteScroll();
 loadDefaultData();
