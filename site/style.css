@@ -2,13 +2,14 @@
 
 :root {
     --color-primary: #0a0a0a;
+    --color-primary-sub: #0a0a0a88;
     --color-secondary: #fafafa;
     --color-tertiary: #d4d4d8;
     --color-border-hover: #a1a1aa;
     --color-info: #71717a;
     --space-1: 4px;
     --space-2: 8px;
-    --space-3: 16px;
+    --space-3: 8px;
     --space-4: 32px;
     --space-6: 64px;
 }
@@ -118,6 +119,7 @@ header {
 }
 
 #genre_toggle {
+    width: 120px;
     height: 40px;
     padding: 0 var(--space-3);
     border: none;
@@ -129,6 +131,7 @@ header {
 }
 
 #genre_menu {
+    width: 120px;
     display: none;
     position: absolute;
     top: 100%;
@@ -175,7 +178,10 @@ header {
 
 .item img {
     width: 100%;
+    aspect-ratio: 4/3;
     display: block;
+    object-fit: cover;
+    object-position: center;
 }
 
 .favorite_button {
@@ -185,7 +191,7 @@ header {
     width: 32px;
     height: 32px;
     border: none;
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-sub);
     color: var(--color-secondary);
     font-size: 18px;
     line-height: 1;
