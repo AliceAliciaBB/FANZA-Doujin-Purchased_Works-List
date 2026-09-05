@@ -37,6 +37,14 @@ a {
     margin-right: auto;
 }
 
+#file_input::file-selector-button {
+    height: 28px;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
 #favorite_only_label {
     display: flex;
     align-items: center;
@@ -49,7 +57,10 @@ a {
 }
 
 #genre_toggle {
-    width: 100px;
+    height: 28px;
+    border: none;
+    background-color: #000;
+    color: #fff;
 }
 
 #genre_menu {
@@ -60,7 +71,6 @@ a {
     z-index: 1;
     padding: 5px;
     background-color: #fff;
-    border: 1px solid #aaa;
     white-space: nowrap;
 }
 
@@ -78,14 +88,14 @@ a {
     max-width: 100%;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    background-color: #eee;
+    background-color: #fff;
 }
 
 .item {
     position: relative;
     width: 100%;
     padding: 5px;
-    background-color: #eee;
+    background-color: #fff;
 }
 
 .item img {
@@ -100,15 +110,11 @@ a {
     width: 28px;
     height: 28px;
     border: none;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #ccc;
+    background-color: #000;
+    color: #fff;
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
-}
-
-.favorite_button.active {
-    color: #e6b800;
 }
 
 #sentinel {
@@ -128,7 +134,8 @@ a {
 
 .genre {
     padding: 1px 5px;
-    background-color: #eee;
+    background-color: #000;
+    color: #fff;
 }
 
 @media (max-width: 768px) {

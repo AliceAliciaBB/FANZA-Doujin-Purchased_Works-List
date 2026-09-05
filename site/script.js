@@ -56,13 +56,12 @@ function createItemElement(work) {
     const favoriteButton = document.createElement("button");
     favoriteButton.type = "button";
     favoriteButton.className = "favorite_button";
-    favoriteButton.textContent = "★";
-    favoriteButton.classList.toggle("active", isFavorite(work.productId));
+    favoriteButton.textContent = isFavorite(work.productId) ? "★" : "☆";
     favoriteButton.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
         toggleFavorite(work.productId);
-        favoriteButton.classList.toggle("active", isFavorite(work.productId));
+        favoriteButton.textContent = isFavorite(work.productId) ? "★" : "☆";
         if (document.getElementById("favorite_only").checked) {
             applyFilterAndSort();
         }
