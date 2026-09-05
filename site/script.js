@@ -1,5 +1,13 @@
 const DEFAULT_DATA_URL = "../data/test.json";
 
+function removeThumbnailResolution(url) {
+    return url.replace(/-\d+x\d+(?=\.\w+$)/, "");
+}
+
+function truncate(text, maxLength) {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
+
 function createItemElement(work) {
     const anchor = document.createElement("a");
     anchor.className = "item";
@@ -8,7 +16,7 @@ function createItemElement(work) {
     anchor.rel = "noopener";
 
     const img = document.createElement("img");
-    img.src = work.thumbnail;
+    img.src = removeThumbnailResolution(work.thumbnail);
     img.alt = work.productId;
     anchor.appendChild(img);
 
@@ -16,7 +24,7 @@ function createItemElement(work) {
     meta.className = "meta";
 
     const circleName = document.createElement("p");
-    circleName.textContent = work.circleName;
+    circleName.textContent = truncate(work.circleName, 7);
     meta.appendChild(circleName);
 
     const genre = document.createElement("p");
@@ -27,7 +35,7 @@ function createItemElement(work) {
     anchor.appendChild(meta);
 
     const title = document.createElement("p");
-    title.textContent = work.title;
+    title.textContent = truncate(work.title, 40);
     anchor.appendChild(title);
 
     return anchor;

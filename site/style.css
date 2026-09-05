@@ -6,7 +6,7 @@
 p {
     text-align: justify;
 }
-a{
+a {
     color: #000;
     text-decoration: none;
 }
@@ -36,6 +36,9 @@ a{
     justify-content: space-between;
     align-items: center;
     margin: 2px 0;
+}
+.meta p {
+    text-align: left;
 }
 .genre {
     background-color: #eee;
