@@ -19,14 +19,14 @@ a {
     background-color: #eee;
     display: grid;
     max-width: 100%;
-    gap: 1px;
+    gap: 10px;
     grid-template-columns: repeat(4, 1fr);
     /* grid-auto-rows: 1fr; */
 }
 .item {
-    background-color: #aaa;
+    background-color: #eee;
     width: 100%;
-    padding: 10px;
+    padding: 5px;
 }
 .item img {
     width: 100%;
@@ -43,4 +43,39 @@ a {
 .genre {
     background-color: #eee;
     padding: 1px 5px;
+}
+#genre_dropdown {
+    position: relative;
+    display: inline-block;
+}
+#genre_menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    padding: 5px;
+    z-index: 1;
+    white-space: nowrap;
+}
+#genre_menu.open {
+    display: block;
+}
+#genre_menu label {
+    display: block;
+    padding: 2px 5px;
+}
+#genre_toggle {
+    width: 100px;
+}
+#tool {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 5px 0;
+    gap: 10px;
+}
+#file_input {
+    margin-right: auto;
 }

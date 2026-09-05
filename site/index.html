@@ -16,11 +16,18 @@
                 </header>
                 <div id="tool">
                     <input type="file" name="json" id="file_input" />
-                    <span>
-                        <!-- 検索 -->
-                        <!-- 絞り込み -->
-                        <!-- 順序 -->
-                    </span>
+                    <input type="search" id="search_input" placeholder="検索" />
+                    <div id="genre_dropdown">
+                        <button type="button" id="genre_toggle">ジャンル</button>
+                        <div id="genre_menu"></div>
+                    </div>
+                    <select id="sort_select">
+                        <option value="default">デフォルト順</option>
+                        <option value="title_asc">タイトル昇順</option>
+                        <option value="title_desc">タイトル降順</option>
+                        <option value="circle_asc">サークル名昇順</option>
+                        <option value="circle_desc">サークル名降順</option>
+                    </select>
                 </div>
                 <div id="container"></div>
             </div>
